@@ -1,0 +1,37 @@
+# Editors and IDEs
+.idea/
+.vscode/
+*.code-workspace
+*.swp
+*.swo
+*~
+
+# Agents
+.agents/
+.codex/
+.codex-workflows/
+
+# System files
+.DS_Store
+
+# Logs
+*.log*
+
+# Test binaries
+*.test
+homepage*
+
+# Scripts
+*.sh*
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Environment and production files
+.env
+.env.production
+docs/*-production.*
+
+# Private keys
+*.pem
