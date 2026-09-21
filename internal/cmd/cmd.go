@@ -36,7 +36,7 @@ func Run() error {
 
 	mux := http.NewServeMux()
 	mux.Handle("GET /v1/runtime", core.NewRuntimeHandler())
-	mux.Handle("/v1/weather", weatherHandler)
+	mux.Handle("GET /v1/weather", weatherHandler)
 
 	server := &http.Server{
 		Addr:              cfg.Server.Address,
