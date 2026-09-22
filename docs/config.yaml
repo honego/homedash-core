@@ -3,11 +3,11 @@ server:
 
 weather:
   # https://dev.qweather.com/docs/configuration/authentication
-  qweather_api_host: "xxxxxxxx.qweatherapi.com" # API 地址
-  qweather_developer_id: "Qxxxxxxxxx" # 开发者 ID, 对应 JWT iss
-  qweather_project_id: "xxxxxxxxxx" # 项目 ID, 对应 JWT sub
-  qweather_credential_id: "xxxxxxxxxx" # 凭据 ID, 对应 JWT kid
-  qweather_private_key: "./ed25519.pem" # Ed25519 私钥文件
+  api_host: "xxxxxxxx.qweatherapi.com" # API 地址
+  developer_id: "Qxxxxxxxxx" # 开发者 ID, 对应 JWT iss
+  project_id: "xxxxxxxxxx" # 项目 ID, 对应 JWT sub
+  credential_id: "xxxxxxxxxx" # 凭据 ID, 对应 JWT kid
+  private_key: "./ed25519.pem" # Ed25519 私钥文件
   longitude: 108.9398 # 经度
   latitude: 34.3416 # 纬度
 media:

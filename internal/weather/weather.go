@@ -76,7 +76,7 @@ func NewHandler(cfg config.WeatherConfig) (*Handler, error) {
 		return nil, errors.New("weather coordinates are not configured")
 	}
 
-	privateKeyPEM, err := os.ReadFile(cfg.QWeatherPrivateKey)
+	privateKeyPEM, err := os.ReadFile(cfg.PrivateKey)
 	if err != nil {
 		return nil, errors.New("failed to read QWeather private key")
 	}
@@ -87,10 +87,10 @@ func NewHandler(cfg config.WeatherConfig) (*Handler, error) {
 
 	return &Handler{
 		client:       &http.Client{Timeout: requestTimeout},
-		baseURL:      "https://" + strings.TrimSpace(cfg.QWeatherAPIHost),
-		developerID:  strings.TrimSpace(cfg.QWeatherDeveloperID),
-		projectID:    strings.TrimSpace(cfg.QWeatherProjectID),
-		credentialID: strings.TrimSpace(cfg.QWeatherCredentialID),
+		baseURL:      "https://" + strings.TrimSpace(cfg.APIHost),
+		developerID:  strings.TrimSpace(cfg.DeveloperID),
+		projectID:    strings.TrimSpace(cfg.ProjectID),
+		credentialID: strings.TrimSpace(cfg.CredentialID),
 		privateKey:   privateKey,
 		longitude:    *cfg.Longitude,
 		latitude:     *cfg.Latitude,

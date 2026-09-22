@@ -24,13 +24,13 @@ type ServerConfig struct {
 
 // 天气配置
 type WeatherConfig struct {
-	QWeatherAPIHost      string   `yaml:"qweather_api_host"`
-	QWeatherDeveloperID  string   `yaml:"qweather_developer_id"`
-	QWeatherProjectID    string   `yaml:"qweather_project_id"`
-	QWeatherCredentialID string   `yaml:"qweather_credential_id"`
-	QWeatherPrivateKey   string   `yaml:"qweather_private_key"`
-	Longitude            *float64 `yaml:"longitude"`
-	Latitude             *float64 `yaml:"latitude"`
+	APIHost      string   `yaml:"api_host"`
+	DeveloperID  string   `yaml:"developer_id"`
+	ProjectID    string   `yaml:"project_id"`
+	CredentialID string   `yaml:"credential_id"`
+	PrivateKey   string   `yaml:"private_key"`
+	Longitude    *float64 `yaml:"longitude"`
+	Latitude     *float64 `yaml:"latitude"`
 }
 
 // 媒体配置
@@ -78,25 +78,25 @@ func validate(cfg Config) error {
 	if strings.TrimSpace(cfg.Server.Address) == "" {
 		return errors.New("server.address must not be empty")
 	}
-	if strings.TrimSpace(cfg.Weather.QWeatherAPIHost) == "" {
-		return errors.New("weather.qweather_api_host must not be empty")
+	if strings.TrimSpace(cfg.Weather.APIHost) == "" {
+		return errors.New("weather.api_host is required")
 	}
-	if strings.ContainsAny(cfg.Weather.QWeatherAPIHost, "/?#@") || strings.Contains(cfg.Weather.QWeatherAPIHost, "://") {
-		return errors.New("weather.qweather_api_host must be a host name")
+	if strings.ContainsAny(cfg.Weather.APIHost, "/?#@") || strings.Contains(cfg.Weather.APIHost, "://") {
+		return errors.New("weather.api_host must be a host name")
 	}
-	if strings.TrimSpace(cfg.Weather.QWeatherDeveloperID) == "" {
-		return errors.New("weather.qweather_developer_id must not be empty")
+	if strings.TrimSpace(cfg.Weather.DeveloperID) == "" {
+		return errors.New("weather.developer_id is required")
 	}
-	if strings.TrimSpace(cfg.Weather.QWeatherProjectID) == "" {
-		return errors.New("weather.qweather_project_id must not be empty")
+	if strings.TrimSpace(cfg.Weather.ProjectID) == "" {
+		return errors.New("weather.project_id is required")
 	}
-	if strings.TrimSpace(cfg.Weather.QWeatherCredentialID) == "" {
-		return errors.New("weather.qweather_credential_id must not be empty")
+	if strings.TrimSpace(cfg.Weather.CredentialID) == "" {
+		return errors.New("weather.credential_id is required")
 	}
-	if strings.TrimSpace(cfg.Weather.QWeatherPrivateKey) == "" {
-		return errors.New("weather.qweather_private_key must not be empty")
+	if strings.TrimSpace(cfg.Weather.PrivateKey) == "" {
+		return errors.New("weather.private_key is required")
 	}
-	if err := validatePrivateKeyPath(cfg.Weather.QWeatherPrivateKey); err != nil {
+	if err := validatePrivateKeyPath(cfg.Weather.PrivateKey); err != nil {
 		return err
 	}
 	if cfg.Weather.Longitude == nil {
@@ -128,15 +128,15 @@ func validate(cfg Config) error {
 func validatePrivateKeyPath(path string) error {
 	info, err := os.Stat(path)
 	if err != nil || !info.Mode().IsRegular() {
-		return errors.New("weather.qweather_private_key must reference a readable regular file")
+		return errors.New("weather.private_key must reference a readable regular file")
 	}
 
 	file, err := os.Open(path)
 	if err != nil {
-		return errors.New("weather.qweather_private_key must reference a readable regular file")
+		return errors.New("weather.private_key must reference a readable regular file")
 	}
 	if err := file.Close(); err != nil {
-		return errors.New("failed to close weather.qweather_private_key")
+		return errors.New("failed to close weather.private_key")
 	}
 
 	return nil
