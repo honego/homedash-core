@@ -91,23 +91,22 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
           GOARM: ${{ matrix.goarm }}
           CGO_ENABLED: 0
-          GOTOOLCHAIN: local
         run: |
           set -euxo pipefail
-          go env
+          echo "GOOS: $GOOS, GOARCH: $GOARCH, GOARM: $GOARM"
           go build -v -trimpath -ldflags="-s -w -buildid= \
             -X github.com/honeok/homedash-core/internal/core.Version=$VERSION \
             -X github.com/honeok/homedash-core/internal/core.GitCommit=$GIT_COMMIT \
             -X github.com/honeok/homedash-core/internal/core.BuildTime=$BUILD_TIME"
 
           if [ ${{ matrix.goos }} = "windows" ]; then
-            dist=homedash-${{ matrix.goos }}-${{ matrix.output }}.exe
-            mv $PROJECT_NAME.exe $dist
+            binary=homedash-${{ matrix.goos }}-${{ matrix.output }}.exe
+            mv $PROJECT_NAME.exe $binary
           else
-            dist=homedash-${{ matrix.goos }}-${{ matrix.output }}
-            mv $PROJECT_NAME $dist
+            binary=homedash-${{ matrix.goos }}-${{ matrix.output }}
+            mv $PROJECT_NAME $binary
           fi
-          zip -9v homedash-${{ matrix.goos }}-${{ matrix.output }}-$VERSION.zip $dist
+          zip -9v homedash-${{ matrix.goos }}-${{ matrix.output }}-$VERSION.zip $binary
 
       - name: "Upload artifact"
         uses: actions/upload-artifact@v7
