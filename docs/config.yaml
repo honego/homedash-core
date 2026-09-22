@@ -14,3 +14,6 @@ media:
   steam:
     api_key: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # Steam Web API Key
     steam_id: "7656119xxxxxxxxxx" # Steam ID
+  music:
+    netease:
+      user_id: 81407428

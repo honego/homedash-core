@@ -2,21 +2,28 @@ package media
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 
 	"github.com/honeok/homepage-core/internal/config"
 	"github.com/honeok/homepage-core/internal/media/game"
+	"github.com/honeok/homepage-core/internal/media/music"
+	"golang.org/x/sync/errgroup"
 )
 
-// 媒体接口
+// 媒体处理器
 type Handler struct {
-	steam *game.Steam
+	steam   *game.Steam
+	netease *music.NetEase
 }
 
 // 创建媒体处理器
 func NewHandler(cfg config.MediaConfig) *Handler {
-	return &Handler{steam: game.NewSteam(cfg.Steam)}
+	return &Handler{
+		steam:   game.NewSteam(cfg.Steam),
+		netease: music.NewNetEase(cfg.Music.NetEase),
+	}
 }
 
 // 返回聚合媒体数据
@@ -27,15 +34,34 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	steam, err := h.steam.Get(r.Context())
-	if err != nil {
-		slog.Error("Failed to fetch Steam data", "err", err)
-		writeError(w, http.StatusBadGateway, "failed to fetch Steam data")
+	group, ctx := errgroup.WithContext(r.Context())
+	var steam game.Data
+	var netease music.NetEaseData
+	group.Go(func() error {
+		var err error
+		steam, err = h.steam.Get(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to fetch Steam data: %w", err)
+		}
+		return nil
+	})
+	group.Go(func() error {
+		var err error
+		netease, err = h.netease.Get(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to fetch NetEase data: %w", err)
+		}
+		return nil
+	})
+	if err := group.Wait(); err != nil {
+		slog.Error("Failed to fetch media data", "err", err)
+		writeError(w, http.StatusBadGateway, "failed to fetch media data")
 		return
 	}
 
 	writeJSON(w, http.StatusOK, map[string]any{
-		"game": map[string]any{"steam": steam},
+		"game":  map[string]any{"steam": steam},
+		"music": map[string]any{"netease": netease},
 	})
 }
 

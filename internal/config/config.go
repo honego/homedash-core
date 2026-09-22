@@ -36,12 +36,23 @@ type WeatherConfig struct {
 // 媒体配置
 type MediaConfig struct {
 	Steam SteamConfig `yaml:"steam"`
+	Music MusicConfig `yaml:"music"`
 }
 
 // Steam 配置
 type SteamConfig struct {
 	APIKey  string `yaml:"api_key"`
 	SteamID string `yaml:"steam_id"`
+}
+
+// 音乐配置
+type MusicConfig struct {
+	NetEase NetEaseConfig `yaml:"netease"`
+}
+
+// 网易云音乐配置
+type NetEaseConfig struct {
+	UserID int64 `yaml:"user_id"`
 }
 
 // 加载配置
@@ -105,6 +116,9 @@ func validate(cfg Config) error {
 	}
 	if strings.TrimSpace(cfg.Media.Steam.SteamID) == "" {
 		return errors.New("media.steam.steam_id must not be empty")
+	}
+	if cfg.Media.Music.NetEase.UserID <= 0 {
+		return errors.New("media.music.netease.user_id must be greater than zero")
 	}
 
 	return nil
