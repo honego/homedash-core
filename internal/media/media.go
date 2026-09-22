@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/honeok/homepage-core/internal/config"
-	"github.com/honeok/homepage-core/internal/media/game"
-	"github.com/honeok/homepage-core/internal/media/music"
+	"github.com/honeok/homedash-core/internal/config"
+	"github.com/honeok/homedash-core/internal/media/game"
+	"github.com/honeok/homedash-core/internal/media/music"
 	"golang.org/x/sync/errgroup"
 )
 

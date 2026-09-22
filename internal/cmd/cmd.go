@@ -9,10 +9,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/honeok/homepage-core/internal/config"
-	"github.com/honeok/homepage-core/internal/core"
-	"github.com/honeok/homepage-core/internal/media"
-	"github.com/honeok/homepage-core/internal/weather"
+	"github.com/honeok/homedash-core/internal/config"
+	"github.com/honeok/homedash-core/internal/core"
+	"github.com/honeok/homedash-core/internal/media"
+	"github.com/honeok/homedash-core/internal/weather"
 )
 
 func Run() error {

@@ -1,4 +1,4 @@
-module github.com/honeok/homepage-core
+module github.com/honeok/homedash-core
 
 go 1.27
 

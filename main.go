@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/honeok/homepage-core/internal/cmd"
+	"github.com/honeok/homedash-core/internal/cmd"
 )
 
 func main() {

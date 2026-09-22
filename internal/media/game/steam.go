@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/honeok/homepage-core/internal/config"
+	"github.com/honeok/homedash-core/internal/config"
 	"golang.org/x/sync/errgroup"
 )
 

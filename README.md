@@ -1,1 +1,1 @@
-# homepage-core
+# homedash-core

@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/honeok/homepage-core/internal/config"
+	"github.com/honeok/homedash-core/internal/config"
 )
 
 // 网易云听歌排行

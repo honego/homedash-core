@@ -15,7 +15,7 @@ import (
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"
-	"github.com/honeok/homepage-core/internal/config"
+	"github.com/honeok/homedash-core/internal/config"
 )
 
 const (
