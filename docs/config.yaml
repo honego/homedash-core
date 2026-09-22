@@ -10,3 +10,7 @@ weather:
   qweather_private_key: "./ed25519.pem" # Ed25519 私钥文件
   longitude: 108.9398 # 经度
   latitude: 34.3416 # 纬度
+media:
+  steam:
+    api_key: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # Steam Web API Key
+    steam_id: "7656119xxxxxxxxxx" # Steam ID

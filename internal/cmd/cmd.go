@@ -11,6 +11,7 @@ import (
 
 	"github.com/honeok/homepage-core/internal/config"
 	"github.com/honeok/homepage-core/internal/core"
+	"github.com/honeok/homepage-core/internal/media"
 	"github.com/honeok/homepage-core/internal/weather"
 )
 
@@ -37,10 +38,11 @@ func Run() error {
 	mux := http.NewServeMux()
 	mux.Handle("GET /v1/runtime", core.NewRuntimeHandler())
 	mux.Handle("GET /v1/weather", weatherHandler)
+	mux.Handle("GET /v1/media", media.NewHandler(cfg.Media))
 
 	server := &http.Server{
 		Addr:              cfg.Server.Address,
-		Handler:           mux,
+		Handler:           accessLog(mux),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
@@ -49,4 +51,42 @@ func Run() error {
 		return fmt.Errorf("failed to start HTTP server: %w", err)
 	}
 	return nil
+}
+
+type statusResponseWriter struct {
+	http.ResponseWriter
+	status int
+}
+
+func (w *statusResponseWriter) WriteHeader(status int) {
+	if w.status == 0 {
+		w.status = status
+	}
+	w.ResponseWriter.WriteHeader(status)
+}
+
+func (w *statusResponseWriter) Write(data []byte) (int, error) {
+	if w.status == 0 {
+		w.status = http.StatusOK
+	}
+	return w.ResponseWriter.Write(data)
+}
+
+// 记录 HTTP 请求
+func accessLog(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		startedAt := time.Now()
+		response := &statusResponseWriter{ResponseWriter: w}
+
+		next.ServeHTTP(response, r)
+		if response.status == 0 {
+			response.status = http.StatusOK
+		}
+		slog.Info("HTTP request",
+			"method", r.Method,
+			"path", r.URL.Path,
+			"status", response.status,
+			"duration", time.Since(startedAt),
+		)
+	})
 }

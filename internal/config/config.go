@@ -14,6 +14,7 @@ import (
 type Config struct {
 	Server  ServerConfig  `yaml:"server"`
 	Weather WeatherConfig `yaml:"weather"`
+	Media   MediaConfig   `yaml:"media"`
 }
 
 // HTTP Server 配置
@@ -30,6 +31,17 @@ type WeatherConfig struct {
 	QWeatherPrivateKey   string   `yaml:"qweather_private_key"`
 	Longitude            *float64 `yaml:"longitude"`
 	Latitude             *float64 `yaml:"latitude"`
+}
+
+// 媒体配置
+type MediaConfig struct {
+	Steam SteamConfig `yaml:"steam"`
+}
+
+// Steam 配置
+type SteamConfig struct {
+	APIKey  string `yaml:"api_key"`
+	SteamID string `yaml:"steam_id"`
 }
 
 // 加载配置
@@ -87,6 +99,12 @@ func validate(cfg Config) error {
 	}
 	if math.IsNaN(*cfg.Weather.Latitude) || math.IsInf(*cfg.Weather.Latitude, 0) || *cfg.Weather.Latitude < -90 || *cfg.Weather.Latitude > 90 {
 		return errors.New("weather.latitude must be between -90 and 90")
+	}
+	if strings.TrimSpace(cfg.Media.Steam.APIKey) == "" {
+		return errors.New("media.steam.api_key must not be empty")
+	}
+	if strings.TrimSpace(cfg.Media.Steam.SteamID) == "" {
+		return errors.New("media.steam.steam_id must not be empty")
 	}
 
 	return nil
