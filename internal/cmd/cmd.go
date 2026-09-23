@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/honeok/homedash-core/internal/config"
-	"github.com/honeok/homedash-core/internal/core"
 	"github.com/honeok/homedash-core/internal/media"
+	"github.com/honeok/homedash-core/internal/status"
 	"github.com/honeok/homedash-core/internal/weather"
 )
 
@@ -36,7 +36,7 @@ func Run() error {
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("GET /v1/runtime", core.NewRuntimeHandler())
+	mux.Handle("GET /v1/status", status.NewHandler())
 	mux.Handle("GET /v1/weather", weatherHandler)
 	mux.Handle("GET /v1/media", media.NewHandler(cfg.Media))
 

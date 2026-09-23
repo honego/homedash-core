@@ -1,18 +1,20 @@
-package core
+package status
 
 import (
 	"encoding/json"
 	"net/http"
 	"runtime"
 	"time"
+
+	"github.com/honeok/homedash-core/internal/core"
 )
 
 // 保存程序启动时间, 用于计算运行时长
-type RuntimeHandler struct {
+type Handler struct {
 	startedAt time.Time
 }
 
-// 定义 /v1/runtime 接口响应结构
+// 定义 /v1/status 接口响应结构
 type runtimeResponse struct {
 	Version    string        `json:"version"`
 	GitCommit  string        `json:"gitCommit"`
@@ -32,20 +34,20 @@ type runtimeMemory struct {
 }
 
 // 记录程序开始提供服务的时间
-func NewRuntimeHandler() *RuntimeHandler {
-	return &RuntimeHandler{startedAt: time.Now()}
+func NewHandler() *Handler {
+	return &Handler{startedAt: time.Now()}
 }
 
 // 返回当前程序的构建信息和 Go Runtime 状态
-func (h *RuntimeHandler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
+func (h *Handler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
 	var mem runtime.MemStats
 	runtime.ReadMemStats(&mem)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	if err := json.NewEncoder(w).Encode(runtimeResponse{
-		Version:    Version,
-		GitCommit:  GitCommit,
-		BuildTime:  BuildTime,
+		Version:    core.Version,
+		GitCommit:  core.GitCommit,
+		BuildTime:  core.BuildTime,
 		GoVersion:  runtime.Version(),
 		Goroutines: runtime.NumGoroutine(),
 		Memory: runtimeMemory{
